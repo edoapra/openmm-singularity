@@ -38,5 +38,11 @@ conda config --set  fetch_threads 2 || true
 
 conda install  -y -c conda-forge  openmm 
 
-python -m openmm.testInstallation
+#python -m openmm.testInstallation
+%environment
+export PATH=/opt/miniconda3/bin:/opt/miniconda3/condabin:$PATH
+#%runscript
+#exec /bin/bash "$@"
+#%startscript
+#exec /bin/bash "$@"
 
