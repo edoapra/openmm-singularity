@@ -72,13 +72,17 @@ from openmm.unit import *
 
 # In[ ]:
 
+#GPU
+platform = Platform.getPlatformByName('CUDA')
+#properties = {'DeviceIndex': '0,1', 'Precision': 'double'}
+properties = {'DeviceIndex': '0,1'}
 
 pdb = PDBFile("alanine-dipeptide.pdb")
 print(pdb.topology)
 forcefield = ForceField("amber14-all.xml")
 system = forcefield.createSystem(pdb.topology, nonbondedCutoff=3 * nanometer, constraints=HBonds)
 integrator = LangevinIntegrator(300 * kelvin, 1 / picosecond, 2 * femtoseconds)
-simulation = Simulation(pdb.topology, system, integrator)
+simulation = Simulation(pdb.topology, system, integrator, platform, properties)
 simulation.context.setPositions(pdb.positions)
 simulation.minimizeEnergy()
 
