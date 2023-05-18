@@ -14,7 +14,7 @@ SINGULARITY_CUDA=11.7
 CUDA_V1=11
 CUDA_V2=7
 
-apt-get -q update && DEBIAN_FRONTEND=noninteractive apt-get -q install -y wget libstdc++6 gcc g++ gfortran  && \
+apt-get -q update && DEBIAN_FRONTEND=noninteractive apt-get -q install -y wget libstdc++6 gcc g++ gfortran && \
  rm -rf /var/lib/apt/lists/* && \
  apt-get autoremove -y && \
  apt-get clean
@@ -38,6 +38,7 @@ cp /usr/lib/x86_64-linux-gnu/libstdc++.so.6 /opt/miniconda3/lib/libstdc++.so.6
 conda config --set  fetch_threads 2 || true
 
 conda install  -y -c conda-forge  openmm=7.7.0
+conda install  -y -c conda-forge  openmm-setup
 
 
 python -m openmm.testInstallation
