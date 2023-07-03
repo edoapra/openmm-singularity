@@ -54,7 +54,6 @@ jobs:
     - name: push to ghcr.io
       run: |
         echo ${{ secrets.GITHUB_TOKEN }} | apptainer remote login -u ${{ github.actor }} --password-stdin oras://ghcr.io
-        cd envs
         pwd
         ls -l
         apptainer remote list
