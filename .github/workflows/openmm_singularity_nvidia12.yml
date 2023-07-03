@@ -44,7 +44,6 @@ jobs:
     - name: build an apptainer container
       run: |
         ls -l
-        cd envs
         df -h . /tmp
         apptainer build --nv --force --fakeroot /tmp/openmm.sif Singularity_12.def
         ls -lrth /tmp/openmm.sif
