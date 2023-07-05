@@ -18,10 +18,19 @@ jobs:
     runs-on: ubuntu-20.04
     strategy:
         fail-fast: false
+        matrix:
+          cuda_version:
+            - 11
+            - 12
     steps:
     - name: tag
+      shell: bash
       run: |
+        if [[ ${{ matrix.cuda_version }} == '12'  ]]; then 
         echo "tag=oras://ghcr.io/${{ github.repository }}/openmm" >> $GITHUB_ENV
+        elif [[ ${{ matrix.cuda_version }} == '11'  ]]; then
+        echo "tag=oras://ghcr.io/${{ github.repository }}/openmm-cuda11" >> $GITHUB_ENV
+        fi
     - name: echo-tag
       run: |
         echo ' the apptainer tag is ' "${{ env.tag }}"
@@ -45,7 +54,7 @@ jobs:
       run: |
         ls -l
         df -h . /tmp
-        apptainer build --nv --force --fakeroot /tmp/openmm.sif Singularity_12.def
+        apptainer build --nv --force --fakeroot /tmp/openmm.sif Singularity_${{ matrix.cuda_version }.def
         ls -lrth /tmp/openmm.sif
     - name: builddate
       id: build-date
