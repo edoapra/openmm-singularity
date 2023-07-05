@@ -22,14 +22,25 @@ jobs:
           cuda_version:
             - 11
             - 12
+          cuda_driver_version:
+            - 530
+            - 535
     steps:
-    - name: tag
+    - name: tag0
       shell: bash
       run: |
         if [[ ${{ matrix.cuda_version }} == '12'  ]]; then
-        echo "tag=oras://ghcr.io/${{ github.repository }}/openmm" >> $GITHUB_ENV
+        echo "tag0=oras://ghcr.io/${{ github.repository }}/openmm" >> $GITHUB_ENV
         elif [[ ${{ matrix.cuda_version }} == '11'  ]]; then
-        echo "tag=oras://ghcr.io/${{ github.repository }}/openmm-cuda11" >> $GITHUB_ENV
+        echo "tag0=oras://ghcr.io/${{ github.repository }}/openmm-cuda11" >> $GITHUB_ENV
+        fi
+    - name: tag
+      shell: bash
+      run: |
+        if [[ ${{ matrix.cuda_driver_version }} == '535'  ]]; then
+        echo "tag=${{ env.tag0 }}" >> $GITHUB_ENV
+        ese
+        echo "tag=${{ env.tag0 }}-cudadriver-${{ matrix.cuda_driver_version }}" >> $GITHUB_ENV
         fi
     - name: echo-tag
       run: |
@@ -55,7 +66,7 @@ jobs:
       run: |
         ls -l
         df -h . /tmp
-        apptainer build --build-arg CUDA_DRIVER_VERSION=530 --nv --force --fakeroot /tmp/openmm.sif Singularity_${{ matrix.cuda_version }}.def
+        apptainer build --build-arg CUDA_DRIVER_VERSION=${{ matrix.cuda_driver_version }} --nv --force --fakeroot /tmp/openmm.sif Singularity_${{ matrix.cuda_version }}.def
         ls -lrth /tmp/openmm.sif
     - name: builddate
       id: build-date
