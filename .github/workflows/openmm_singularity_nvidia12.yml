@@ -54,7 +54,7 @@ jobs:
       run: |
         ls -l
         df -h . /tmp
-        apptainer build --nv --force --fakeroot /tmp/openmm.sif Singularity_${{ matrix.cuda_version }}.def
+        apptainer build --build-arg CUDA_DRIVER_VERSION=530 --nv --force --fakeroot /tmp/openmm.sif Singularity_${{ matrix.cuda_version }}.def
         ls -lrth /tmp/openmm.sif
     - name: builddate
       id: build-date

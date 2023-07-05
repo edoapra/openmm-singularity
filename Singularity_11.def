@@ -3,6 +3,9 @@ From: nvidia/cuda:11.7.1-runtime-ubuntu22.04
 #From: nvidia/cuda:12.1.1-runtime-ubuntu22.04
 Stage: spython-base
 
+%arguments
+   CUDA_DRIVER_VERSION=530
+   
 %files
 %labels
 maintainer  Edoardo Apra <edoardo.apra@pnnl.gov>
@@ -13,7 +16,8 @@ org.opencontainers.image.authors  "Edoardo Apra"
 apt-get -q update && DEBIAN_FRONTEND=noninteractive apt-get -q install -y wget libstdc++6 gcc g++ gfortran tzdata && \
 ln -fs /usr/share/zoneinfo/America/Los_Angeles /etc/localtime && \
 dpkg-reconfigure --frontend noninteractive tzdata && \
-apt-get install -y  nvidia-utils-530 nvidia-compute-utils-530 && \
+echo CUDA_DRIVER_VERSION is $CUDA_DRIVER_VERSION \
+apt-get install -y  nvidia-utils-$CUDA_DRIVER_VERSION nvidia-compute-utils-$CUDA_DRIVER_VERSION && \
  rm -rf /var/lib/apt/lists/* && \
  apt-get autoremove -y && \
  dpkg-query -Wf '${Installed-Size}\t${Package}\n' | sort -n |tail -120 && \
