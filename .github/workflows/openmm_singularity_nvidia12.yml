@@ -46,8 +46,7 @@ jobs:
         APP_FOLDER: 1.2.0-rc.1
       run: |
         sudo apt-get install -y  libfuse2 libseccomp2 zlib1g uidmap squashfs-tools squashfuse fuse2fs fuse-overlayfs fakeroot
-#        wget -q  https://github.com/apptainer/apptainer/releases/download/v${APP_VER}/apptainer_${APP_VER}_amd64.deb
-        wget   https://github.com/apptainer/apptainer/releases/download/v${APP_VER}/apptainer_${APP_VER}_amd64.deb 
+        wget   https://github.com/apptainer/apptainer/releases/download/v${APP_FOLDER}/apptainer_${APP_VER}_amd64.deb 
         sudo dpkg -i apptainer_${APP_VER}_amd64.deb
         rm apptainer_${APP_VER}_amd64.deb
         which apptainer
