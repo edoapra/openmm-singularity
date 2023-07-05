@@ -39,7 +39,7 @@ jobs:
       run: |
         if [[ ${{ matrix.cuda_driver_version }} == '535'  ]]; then
         echo "tag=${{ env.tag0 }}" >> $GITHUB_ENV
-        ese
+        else
         echo "tag=${{ env.tag0 }}-cudadriver-${{ matrix.cuda_driver_version }}" >> $GITHUB_ENV
         fi
     - name: echo-tag
