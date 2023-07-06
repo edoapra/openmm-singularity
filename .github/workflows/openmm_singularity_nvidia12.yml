@@ -1,4 +1,4 @@
-ame: openmm_apptainer_nvidia12
+name: openmm_apptainer_nvidia12
 
 on:
   push:
@@ -38,6 +38,8 @@ jobs:
         clean: false
     - name: Load Python
       uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
     - name: Install apptainer
       env:
         APP_VER: 1.2.0.rc.1
