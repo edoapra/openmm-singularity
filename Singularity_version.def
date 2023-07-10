@@ -49,6 +49,8 @@ conda config --set  fetch_threads 2 || true
 conda install  -y -c conda-forge  micromamba
 micromamba install  -y -c conda-forge  openmm=7.7.0
 micromamba install  -y -c conda-forge  openmm-setup
+micromamba install -y -c conda-forge flask=2.1.3
+micromamba install -c conda-forge werkzeug=2.0.3
 
     conda clean -y --force-pkgs-dirs
     du -sk $MYPREFIX/lib/*|sort -n    
