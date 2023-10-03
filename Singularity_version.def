@@ -73,10 +73,10 @@ python -m pip install matplotlib mdtraj nglview numpy pandas
 
 %environment
 export CUDA=$(echo $CUDA_VERSION |cut -c 1-4)
-export PATH=/opt/miniconda3/bin:/opt/miniconda3/condabin:$PATH
+MYPREFIX="/opt/conda"
+export PATH=$MYPREFIX/bin:$MYPREFIX/condabin:$PATH
 export LD_LIBRARY_PATH=/usr/local/cuda-${CUDA}/compat:/usr/local/cuda-${CUDA}/lib64:$LD_LIBRARY_PATH
 #%runscript
 #exec /bin/bash "$@"
 #%startscript
 #exec /bin/bash "$@"
-
