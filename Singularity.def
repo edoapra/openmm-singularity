@@ -20,25 +20,32 @@ apt-get -q update && DEBIAN_FRONTEND=noninteractive apt-get -q install -y wget l
  apt-get clean
 
 
-MYPREFIX="/opt/miniconda3"
-wget --quiet -O /tmp/miniconda3.sh \
-https://repo.anaconda.com/miniconda/Miniconda3-py39_23.3.1-0-Linux-x86_64.sh && \
- bash /tmp/miniconda3.sh -b -p ${MYPREFIX}  && \
- rm /tmp/miniconda3.sh
+MYPREFIX="/opt/conda"
+    MINIFORGE3=Miniforge3-Linux-x86_64.sh && \
+    wget -q -P /tmp  https://github.com/conda-forge/miniforge/releases/latest/download/$MINIFORGE3 && \
+    bash /tmp/$MINIFORGE3 -b -u -p $MYPREFIX && \
+    rm -f /tmp/$MINIFORGE3 && \
+    export PATH="$MYPREFIX/bin:$PATH" && \
+    eval "$($MYPREFIX/bin/conda shell.dash hook)" && \
+      conda update -n base -c conda-forge conda  && \
+      conda install -y -c conda-forge micromamba && \
+    export MAMBA_ROOT_PREFIX=/opt/micromamba && \
+      eval "$(micromamba shell hook --shell dash)" && \
+    export MAMBA_ROOT_PREFIX=/opt/micromamba 
 export CONDA_FETCH_THREADS=2 # parallel download for recent conda versions
 export MAX_JOBS=2 # ninja workers
  eval "$(${MYPREFIX}/bin/conda shell.bash hook)"
 #hack to fix miniconda GLIBCXX error
-conda install -q -y libstdcxx-ng
-ls -l /opt/miniconda3/lib/libstdc++.so.6 /usr/lib/x86_64-linux-gnu/libstdc++.so.6 || true
-rm -f /opt/miniconda3/lib/libstdc++.so.6*
-cp /usr/lib/x86_64-linux-gnu/libstdc++.so.6 /opt/miniconda3/lib/libstdc++.so.6
+#conda install -q -y libstdcxx-ng
+#ls -l /opt/miniconda3/lib/libstdc++.so.6 /usr/lib/x86_64-linux-gnu/libstdc++.so.6 || true
+#rm -f /opt/miniconda3/lib/libstdc++.so.6*
+#cp /usr/lib/x86_64-linux-gnu/libstdc++.so.6 /opt/miniconda3/lib/libstdc++.so.6
 
 
-conda config --set  fetch_threads 2 || true
+#conda config --set  fetch_threads 2 || true
 
-conda install  -y -c conda-forge  openmm=7.7.0
-conda install  -y -c conda-forge  openmm-setup
+micromamba install  -y -c conda-forge  openmm=7.7.0
+micromamba install  -y -c conda-forge  openmm-setup
 
 
 python -m openmm.testInstallation
@@ -48,7 +55,11 @@ python -m openmm.testInstallation
 python -m pip install matplotlib mdtraj nglview numpy pandas
 
 %environment
-export PATH=/opt/miniconda3/bin:/opt/miniconda3/condabin:$PATH
+    export MYPREFIX=/opt/conda
+    export MAMBA_ROOT_PREFIX=/opt/micromamba
+    eval "$($MYPREFIX/bin/conda shell.dash hook)"
+    eval "$(micromamba shell hook --shell dash)"
+#export PATH=/opt/miniconda3/bin:/opt/miniconda3/condabin:$PATH
 #%runscript
 #exec /bin/bash "$@"
 #%startscript
