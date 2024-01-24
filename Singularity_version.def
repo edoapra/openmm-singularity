@@ -51,7 +51,7 @@ export MAX_JOBS=2 # ninja workers
 
 #conda config --set  fetch_threads 2 || true
 
-micromamba install  -y -c conda-forge  openmm=8.0.0
+micromamba install  -y -c conda-forge  openmm=8.1.1
 micromamba install  -y -c conda-forge  openmm-setup
 
 
