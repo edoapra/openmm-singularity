@@ -50,6 +50,7 @@ jobs:
     - name: tag
       shell: bash
       run: |
+        echo bootstrap is @ ${{ matrix.bootstrap }} @
         if [ ${{ matrix.bootstrap }} == "" ]; then
         echo "tag=oras://ghcr.io/${{ github.repository }}/openmm-cuda${{ matrix.cuda_version }}-driver${{ matrix.cuda_driver_version }}" >> $GITHUB_ENV
         else
