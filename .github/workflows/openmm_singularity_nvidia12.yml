@@ -25,9 +25,18 @@ jobs:
             - 12.0.1
             - 12.1.1
             - 12.2.0
+            - 12.3.1
           cuda_driver_version:
             - 530
             - 545
+          bootstrap:
+            - nvidia/cuda:{{ CUDA_VERSION }}-runtime-ubuntu22.04
+          include:
+            - bootstrap: ubuntu:22.04
+          exclude:
+            - bootstrap: nvidia/cuda:{{ CUDA_VERSION }}-runtime-ubuntu22.04
+            - cuda_version: 11.7.1
+            - cuda_driver_version: 545
     steps:
     - name: pkg cleanup
       shell: bash
