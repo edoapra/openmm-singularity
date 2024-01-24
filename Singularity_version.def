@@ -1,13 +1,13 @@
 Bootstrap: docker
 #From: ubuntu:22.04
 #From: nvidia/cuda:11.7.0-runtime-ubuntu22.04
-From: nvidia/cuda:{{ CUDA_VERSION }}-runtime-ubuntu22.04
+From: {{ MY_BOOTSTRAP }}
 Stage: spython-base
 
 %arguments
    CUDA_DRIVER_VERSION=530
    CUDA_VERSION=12.2.0
-
+   MY_BOOTSTRAP=nvidia/cuda:{{ CUDA_VERSION }}-runtime-ubuntu22.04
 
 %files
 %labels
