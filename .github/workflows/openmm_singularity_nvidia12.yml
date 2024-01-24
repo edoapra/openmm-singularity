@@ -50,8 +50,11 @@ jobs:
     - name: tag
       shell: bash
       run: |
-        if [ -n ${{ matrix.bootstrap }} ]; then
+        if [ ${{ matrix.bootstrap }} == "" ]; then
         echo "tag=oras://ghcr.io/${{ github.repository }}/openmm-cuda${{ matrix.cuda_version }}-driver${{ matrix.cuda_driver_version }}" >> $GITHUB_ENV
+        else
+        echo "tag=oras://ghcr.io/${{ github.repository }}/openmm-${{ matrix.bootstrap }}" >> $GITHUB_ENV
+        fi
     - name: echo-tag
       run: |
         echo ' the apptainer tag is ' ${{ env.tag }}
