@@ -29,8 +29,6 @@ jobs:
           cuda_driver_version:
             - 530
             - 545
-          bootstrap:
-            - nvidia/cuda:{{ CUDA_VERSION }}-runtime-ubuntu22.04
           include:
             - bootstrap: ubuntu:22.04
               cuda_version: 0.0.0
@@ -55,7 +53,7 @@ jobs:
         echo "tag=oras://ghcr.io/${{ github.repository }}/openmm-cuda${{ matrix.cuda_version }}-driver${{ matrix.cuda_driver_version }}" >> $GITHUB_ENV
     - name: echo-tag
       run: |
-        echo ' the apptainer tag is ' "${{ env.tag }}"
+        echo ' the apptainer tag is ' ${{ env.tag }}
     - name: Checkout source
       uses: actions/checkout@v4
       with:
@@ -79,12 +77,17 @@ jobs:
       run: |
         ls -l
         df -h . /tmp
-        apptainer build  \
+        myargs= \
         --build-arg CUDA_DRIVER_VERSION=${{ matrix.cuda_driver_version }} \
         --build-arg CUDA_VERSION=${{ matrix.cuda_version }} \
-        --build-arg MY_BOOTSTRAP=${{ matrix.bootstrap }} \
+        if [ -n ${{ matrix.bootstrap }}" ]; then
+        myargs+=--build-arg MY_BOOTSTRAP=${{ matrix.bootstrap }} ; fi
+        echo myargs is $myargs
+        apptainer build  \
+        $myargs \
         --nv --force --fakeroot /tmp/openmm.sif Singularity_version.def
         ls -lrth /tmp/openmm.sif
+      shell: bash
     - name: builddate
       id: build-date
       run: |
