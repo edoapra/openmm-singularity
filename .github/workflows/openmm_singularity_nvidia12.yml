@@ -54,7 +54,7 @@ jobs:
         if [ -z ${{ matrix.bootstrap }} ]; then
         echo "tag=oras://ghcr.io/${{ github.repository }}/openmm-cuda${{ matrix.cuda_version }}-driver${{ matrix.cuda_driver_version }}" >> $GITHUB_ENV
         else
-        echo "tag=oras://ghcr.io/${{ github.repository }}/openmm-${{ matrix.bootstrap }}" >> $GITHUB_ENV
+        echo "tag=oras://ghcr.io/${{ github.repository }}/openmm-$(echo ${{ matrix.bootstrap }}|sed -e s/:/_/)" >> $GITHUB_ENV
         fi
     - name: echo-tag
       run: |
