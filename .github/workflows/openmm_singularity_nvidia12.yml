@@ -50,6 +50,7 @@ jobs:
     - name: tag
       shell: bash
       run: |
+        if [ -n ${{ matrix.bootstrap }} ]; then
         echo "tag=oras://ghcr.io/${{ github.repository }}/openmm-cuda${{ matrix.cuda_version }}-driver${{ matrix.cuda_driver_version }}" >> $GITHUB_ENV
     - name: echo-tag
       run: |
@@ -59,7 +60,7 @@ jobs:
       with:
         clean: false
     - name: Load Python
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v5
       with:
         python-version: '3.10'
     - name: Install apptainer
@@ -79,7 +80,7 @@ jobs:
         df -h . /tmp
         myargs=" --build-arg CUDA_DRIVER_VERSION=${{ matrix.cuda_driver_version }} \
         --build-arg CUDA_VERSION=${{ matrix.cuda_version }} "
-        if [ -n ${{ matrix.bootstrap }} ]; then
+        if [ ${{ matrix.bootstrap }} != "" ]; then
         myargs+=" --build-arg MY_BOOTSTRAP=${{ matrix.bootstrap }} "; fi
         echo myargs is $myargs
         apptainer build  \
