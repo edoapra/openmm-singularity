@@ -25,6 +25,9 @@ jobs:
             - 12.0.1
             - 12.1.1
             - 12.2.0
+          cuda_driver_version:
+            - 530
+            - 545
     steps:
     - name: pkg cleanup
       shell: bash
@@ -42,12 +45,12 @@ jobs:
     - name: tag
       shell: bash
       run: |
-        echo "tag=oras://ghcr.io/${{ github.repository }}/openmm-cuda${{ matrix.cuda_version }}" >> $GITHUB_ENV
+        echo "tag=oras://ghcr.io/${{ github.repository }}/openmm-cuda${{ matrix.cuda_version }}-driver${{ matrix.cuda_driver_version }}" >> $GITHUB_ENV
     - name: echo-tag
       run: |
         echo ' the apptainer tag is ' "${{ env.tag }}"
     - name: Checkout source
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
       with:
         clean: false
     - name: Load Python
@@ -56,8 +59,8 @@ jobs:
         python-version: '3.10'
     - name: Install apptainer
       env:
-        APP_VER: 1.2.0.rc.1
-        APP_FOLDER: 1.2.0-rc.1
+        APP_VER: 1.2.5
+        APP_FOLDER: 1.2.5
       run: |
         sudo apt-get install -y  libfuse2 libseccomp2 zlib1g uidmap squashfs-tools squashfuse fuse2fs fuse-overlayfs fakeroot
         wget   https://github.com/apptainer/apptainer/releases/download/v${APP_FOLDER}/apptainer_${APP_VER}_amd64.deb 
@@ -69,7 +72,7 @@ jobs:
       run: |
         ls -l
         df -h . /tmp
-        apptainer build --build-arg CUDA_DRIVER_VERSION=530 --build-arg CUDA_VERSION=${{ matrix.cuda_version }} --nv --force --fakeroot /tmp/openmm.sif Singularity_version.def
+        apptainer build --build-arg CUDA_DRIVER_VERSION=${{ matrix.cuda_driver_version }} --build-arg CUDA_VERSION=${{ matrix.cuda_version }} --nv --force --fakeroot /tmp/openmm.sif Singularity_version.def
         ls -lrth /tmp/openmm.sif
     - name: builddate
       id: build-date
