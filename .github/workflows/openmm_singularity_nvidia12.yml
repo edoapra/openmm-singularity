@@ -22,28 +22,55 @@ jobs:
           cuda_version:
             - 11.7.1
             - 11.8.0
+            - 12.0.1
             - 12.1.1
             - 12.2.0
+            - 12.3.1
+          cuda_driver_version:
+            - 530
+            - 545
+          include:
+            - bootstrap: ubuntu:22.04
+              cuda_version: 0.0.0
+              cuda_driver_version: 000
     steps:
+    - name: pkg cleanup
+      shell: bash
+      run: |
+        dpkg-query -Wf '${Installed-Size}\t${Package}\n' | sort -n
+        sudo apt-get purge -y azure-cli || true
+        sudo apt-get purge -y google-cloud-cli azure-cli microsoft-edge-stable dotnet-sdk-7.0 dotnet-sdk-6.0 google-chrome-stable firefox
+        sudo apt-get purge -y temurin-17-jdk temurin-11-jdk hhvm temurin-8-jdk
+        sudo apt-get purge -y llvm-12-dev llvm-11-dev llvm-10-dev
+        sudo apt-get purge -y libgl1-mesa-dri
+        sudo apt-get -y clean
+        sudo apt-get autoremove -y 
+        dpkg-query -Wf '${Installed-Size}\t${Package}\n' | sort -n
+        df -h
     - name: tag
       shell: bash
       run: |
-        echo "tag=oras://ghcr.io/${{ github.repository }}/openmm-cuda${{ matrix.cuda_version }}" >> $GITHUB_ENV
+        echo bootstrap is @ ${{ matrix.bootstrap }} @
+        if [ -z ${{ matrix.bootstrap }} ]; then
+        echo "tag=oras://ghcr.io/${{ github.repository }}/openmm-cuda${{ matrix.cuda_version }}-driver${{ matrix.cuda_driver_version }}" >> $GITHUB_ENV
+        else
+        echo "tag=oras://ghcr.io/${{ github.repository }}/openmm-$(echo ${{ matrix.bootstrap }}|sed -e s/:/_/)" >> $GITHUB_ENV
+        fi
     - name: echo-tag
       run: |
-        echo ' the apptainer tag is ' "${{ env.tag }}"
+        echo ' the apptainer tag is ' ${{ env.tag }}
     - name: Checkout source
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
       with:
         clean: false
     - name: Load Python
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v5
       with:
         python-version: '3.10'
     - name: Install apptainer
       env:
-        APP_VER: 1.2.0.rc.1
-        APP_FOLDER: 1.2.0-rc.1
+        APP_VER: 1.2.5
+        APP_FOLDER: 1.2.5
       run: |
         sudo apt-get install -y  libfuse2 libseccomp2 zlib1g uidmap squashfs-tools squashfuse fuse2fs fuse-overlayfs fakeroot
         wget   https://github.com/apptainer/apptainer/releases/download/v${APP_FOLDER}/apptainer_${APP_VER}_amd64.deb 
@@ -55,8 +82,16 @@ jobs:
       run: |
         ls -l
         df -h . /tmp
-        apptainer build --build-arg CUDA_DRIVER_VERSION=530 --build-arg CUDA_VERSION=${{ matrix.cuda_version }} --nv --force --fakeroot /tmp/openmm.sif Singularity_version.def
+        myargs=" --build-arg CUDA_DRIVER_VERSION=${{ matrix.cuda_driver_version }} \
+        --build-arg CUDA_VERSION=${{ matrix.cuda_version }} "
+        if [ ! -z ${{ matrix.bootstrap }}  ]; then
+        myargs+=" --build-arg MY_BOOTSTRAP=${{ matrix.bootstrap }} "; fi
+        echo myargs is $myargs
+        apptainer build  \
+        $myargs \
+        --nv --force --fakeroot /tmp/openmm.sif Singularity_version.def
         ls -lrth /tmp/openmm.sif
+      shell: bash
     - name: builddate
       id: build-date
       run: |
