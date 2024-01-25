@@ -20,8 +20,6 @@ apt-get -q update && DEBIAN_FRONTEND=noninteractive apt-get -q install -y wget l
 ln -fs /usr/share/zoneinfo/America/Los_Angeles /etc/localtime && \
 dpkg-reconfigure --frontend noninteractive tzdata && \
 if [ {{  MY_BOOTSTRAP }} != "ubuntu:22.04" ]; then echo CUDA_DRIVER_VERSION is {{ CUDA_DRIVER_VERSION }} ; \
-rm /etc/apt/sources.list.d/cuda*.list ; \
-apt-get -q update; \
 apt-get install -y  nvidia-utils-{{ CUDA_DRIVER_VERSION }} nvidia-compute-utils-{{ CUDA_DRIVER_VERSION }};fi   &&\
  rm -rf /var/lib/apt/lists/* && \
  apt-get autoremove -y && \
