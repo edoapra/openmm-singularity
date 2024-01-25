@@ -11,7 +11,7 @@ module purge
 module load gcc
 export https_proxy=http://proxy.emsl.pnl.gov:3128
 export http_proxy=http://proxy.emsl.pnl.gov:3128
-apptainer pull  -F /tmp/openmm.sif oras://ghcr.io/edoapra/openmm-singularity/openmm:latest
+apptainer pull  -F /tmp/openmm.sif oras://ghcr.io/edoapra/openmm-singularity/openmm-ubuntu_22.04:latest
 #cp $ORGPWD/input.prmtop .
 #cp $ORGPWD/input.inpcrd .
 #cp $ORGPWD/run_openmm_simulation_amber.py .
