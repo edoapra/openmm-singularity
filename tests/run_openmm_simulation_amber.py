@@ -34,7 +34,7 @@ barostatInterval = 25
 steps = 1000000
 equilibrationSteps = 1000
 platform = Platform.getPlatformByName('CUDA')
-platformProperties = {'DeviceIndex': '0'}
+platformProperties = {'DeviceIndex': '0,1'}
 dcdReporter = DCDReporter('trajectory.dcd', 10000)
 #dataReporter = StateDataReporter('log.txt', 1000, totalSteps=steps,
 dataReporter = StateDataReporter(stdout,1000, totalSteps=steps,
