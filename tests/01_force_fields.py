@@ -80,7 +80,7 @@ properties = {'DeviceIndex': '0,1'}
 pdb = PDBFile("alanine-dipeptide.pdb")
 print(pdb.topology)
 forcefield = ForceField("amber14-all.xml")
-system = forcefield.createSystem(pdb.topology, nonbondedCutoff=3 * nanometer, constraints=HBonds)
+system = forcefield.createSystem(pdb.topology, nonbondedMethod=PME, constraints=HBonds, nonbondedCutoff = 3.0*nanometers)
 integrator = LangevinIntegrator(300 * kelvin, 1 / picosecond, 2 * femtoseconds)
 simulation = Simulation(pdb.topology, system, integrator, platform, properties)
 simulation.context.setPositions(pdb.positions)

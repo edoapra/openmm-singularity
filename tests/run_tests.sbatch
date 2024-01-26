@@ -16,6 +16,6 @@ apptainer pull  -F /tmp/openmm.sif oras://ghcr.io/edoapra/openmm-singularity/ope
 #cp $ORGPWD/input.inpcrd .
 #cp $ORGPWD/run_openmm_simulation_amber.py .
 MYFS=$(findmnt -r -T . | tail -1 |cut -d ' ' -f 1)
-apptainer exec --nv    /tmp/openmm.sif  python  -m openmm.testInstallation
-apptainer exec --nv --bind $MYFS   /tmp/openmm.sif     python ./run_openmm_simulation_amber.py
-
+/usr/bin/time -p apptainer exec --nv  --bind $MYFS  /tmp/openmm.sif   python  02_lennard_jones.py
+/usr/bin/time -p apptainer exec --nv  --bind $MYFS  /tmp/openmm.sif   python  01_force_fields.py
+/usr/bin/time -p apptainer exec --nv  --bind $MYFS  /tmp/openmm.sif   python  01_noninteractive_notebook_on_hpc.py

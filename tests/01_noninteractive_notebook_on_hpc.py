@@ -88,6 +88,8 @@ from openmm.unit import *
 
 
 pdb = PDBFile("alanine-dipeptide.pdb")
+platform = Platform.getPlatformByName('CUDA')
+platformProperties = {'DeviceIndex': '0,1'}
 modeller = Modeller(pdb.topology, pdb.positions)
 forcefield = ForceField("amber14-all.xml", "amber14/tip3pfb.xml")
 modeller.addSolvent(forcefield, model="tip3p", padding=1 * nanometer)
@@ -100,7 +102,7 @@ with open("init3.pdb", "w") as outfile:
 # The modeller builds a periodic box with the solute and solvent molecules.
 # PME is the method to compute long-range electristatic interactions in
 # periodic systems.
-system = forcefield.createSystem(modeller.topology, nonbondedMethod=PME, constraints=HBonds)
+system = forcefield.createSystem(modeller.topology, nonbondedMethod=PME, constraints=HBonds, nonbondedCutoff = 0.5*nanometers)
 temperature = 300 * kelvin
 pressure = 1 * bar
 integrator = LangevinIntegrator(temperature, 1 / picosecond, 2 * femtoseconds)

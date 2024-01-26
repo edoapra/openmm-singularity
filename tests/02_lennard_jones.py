@@ -63,6 +63,8 @@ cutoff = 3 * sigma
 
 
 # Define the OpenMM system with the argon atoms.
+platform = Platform.getPlatformByName('CUDA')
+platformProperties = {'DeviceIndex': '0,1'}
 system = System()
 box_matrix = box_size * np.identity(3)
 system.setDefaultPeriodicBoxVectors(*box_matrix)
