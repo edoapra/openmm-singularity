@@ -70,7 +70,7 @@ python -m openmm.testInstallation
 
 # extra python components for https://github.com/molmod/openmm-tutorial-msbs/blob/main/01_first_steps/02_lennard_jones.ipynb
 
-python -m pip install matplotlib mdtraj nglview numpy pandas
+python -m pip install matplotlib mdtraj nglview numpy pandas ParmEd
 
 %environment
 export CUDA=$(echo $CUDA_VERSION |cut -c 1-4)
