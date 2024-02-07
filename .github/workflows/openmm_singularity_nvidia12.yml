@@ -33,6 +33,7 @@ jobs:
             - bootstrap: ubuntu:22.04
               cuda_version: 0.0.0
               cuda_driver_version: 000
+
     steps:
     - name: pkg cleanup
       shell: bash
@@ -82,8 +83,9 @@ jobs:
       run: |
         ls -l
         df -h . /tmp
+        if [ ${{ matrix.cuda_driver_version }} == "000" ]; then
         myargs=" --build-arg CUDA_DRIVER_VERSION=${{ matrix.cuda_driver_version }} \
-        --build-arg CUDA_VERSION=${{ matrix.cuda_version }} "
+        --build-arg CUDA_VERSION=${{ matrix.cuda_version }} " ; fi
         if [ ! -z ${{ matrix.bootstrap }}  ]; then
         myargs+=" --build-arg MY_BOOTSTRAP=${{ matrix.bootstrap }} "; fi
         echo myargs is $myargs
