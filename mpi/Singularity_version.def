@@ -57,6 +57,9 @@ micromamba install -c conda-forge werkzeug=2.0.3
     rm -f /usr/local/cuda-*/targets/x86_64-linux/lib/lib*.a
     rm -f $MYPREFIX/lib/*amdg*
 #    rm -f $MYPREFIX/lib/*cublas*
+echo ' which python' $(which python)
+echo ' python -V ' $(python -V) ||true
+echo ' python3 -V ' $(python3 -V) ||true
 #install openmpi
 apt-get update \
 && apt-get -y install -y   tar libnl-3-200 libnl-route-3-200 libgomp1 libnuma1 \
@@ -71,8 +74,8 @@ apt-get update \
 && export OMPI_DIR=/opt/ompi\
 && export SINGULARITY_ompi=4.1.4\
 && export SINGULARITY_ompi_prefix=ompi-$ompi\
-&& export PATH=$OMPI_DIR/bin::/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin \
-&& export LD_LIBRARY_PATH=$OMPI_DIR/lib \
+&& export PATH=$OMPI_DIR/bin:$PATH \
+&& export LD_LIBRARY_PATH=$OMPI_DIR/lib:$LD_LIBRARY_PATH \
 && wget --progress=dot:giga https://github.com/open-mpi/ompi/archive/v$ompi.tar.gz -O - | tar xzf -   \
 && cd $ompi_prefix                                                        && \
 ./autogen.pl                                                           && \
@@ -87,11 +90,9 @@ apt-get update \
 &&make install                                                             \
 && make clean                                                               \
 && cd .. ; rm -rf *tar*gz $ompi-prefix ucx-$ucx  \
-&& echo ' check ucx' \
-&& echo ' /opt/ompi/bin/ucx_info -v ' `/opt/ompi/bin/ucx_info -v|| true` \
-&& echo ' ucx Transports' `/opt/ompi/bin/ucx_info  -d |grep Transport |cut -c 19- || true` \
+&& echo ' mpicc' `/opt/ompi/bin/mpicc -show || true` \
 && echo '********'  \
-&& export PATH=$OMPI_DIR/bin:$PATH\
+&& export PATH=$OMPI_DIR/bin:$PATH  \
 && export LD_LIBRARY_PATH=$OMPI_DIR/lib:$LD_LIBRARY_PATH
 
 python -m openmm.testInstallation
@@ -99,7 +100,13 @@ python -m openmm.testInstallation
 # extra python components for https://github.com/molmod/openmm-tutorial-msbs/blob/main/01_first_steps/02_lennard_jones.ipynb
 
 python -m pip install matplotlib mdtraj nglview numpy pandas
-pip install  --no-binary :all: mpi4py
+# for repex
+python -m pip install  --no-binary :all: mpi4py
+python -m pip install scipy numpy
+# might need to compile from source NetCDF & HDF5
+# NetCDF (compiled with netcdf4 support) and HDF5
+apt-get install -y libhdf5-dev libhdf4-dev libnetcdf-dev
+python -m pip install netcdf4-python 
 #test with https://github.com/choderalab/gibbs/blob/master/openmm/python/repexmpi.py
 %environment
 export CUDA=$(echo $CUDA_VERSION |cut -c 1-4)
