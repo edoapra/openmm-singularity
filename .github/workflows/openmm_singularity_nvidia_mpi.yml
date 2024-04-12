@@ -1,0 +1,81 @@
+name: openmm_apptainer_nvidia_mpi
+
+on:
+  push:
+    paths-ignore:
+      - '*.sh'
+      - '*.sbatch'
+  pull_request:
+  schedule:
+    - cron: '0 0 * * SUN'
+  repository_dispatch:
+    types: [backend_automation]
+  workflow_dispatch:
+  workflow_call:
+
+jobs:
+  build_image:
+    runs-on: ubuntu-20.04
+    strategy:
+        fail-fast: false
+        matrix:
+          cuda_version:
+            - 11.7.1
+            - 11.8.0
+            - 12.1.1
+            - 12.2.0
+            - 12.3.2
+    steps:
+    - name: tag
+      shell: bash
+      run: |
+        echo "tag=oras://ghcr.io/${{ github.repository }}/openmm-cuda${{ matrix.cuda_version }}-mpi" >> $GITHUB_ENV
+    - name: echo-tag
+      run: |
+        echo ' the apptainer tag is ' "${{ env.tag }}"
+    - name: Checkout source
+      uses: actions/checkout@v3
+      with:
+        clean: false
+    - name: Load Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+    - name: Install apptainer
+      env:
+        APP_VER: 1.2.0.rc.1
+        APP_FOLDER: 1.2.0-rc.1
+      run: |
+        sudo apt-get install -y  libfuse2 libseccomp2 zlib1g uidmap squashfs-tools squashfuse fuse2fs fuse-overlayfs fakeroot
+        wget   https://github.com/apptainer/apptainer/releases/download/v${APP_FOLDER}/apptainer_${APP_VER}_amd64.deb 
+        sudo dpkg -i apptainer_${APP_VER}_amd64.deb
+        rm apptainer_${APP_VER}_amd64.deb
+        which apptainer
+        apptainer version
+    - name: build an apptainer container
+      run: |
+        cd mpi
+        ls -l
+        df -h . /tmp
+        apptainer build --build-arg CUDA_DRIVER_VERSION=530 --build-arg CUDA_VERSION=${{ matrix.cuda_version }} --nv --force --fakeroot /tmp/openmm.sif Singularity_version.def
+        ls -lrth /tmp/openmm.sif
+    - name: builddate
+      id: build-date
+      run: |
+        echo "date=$(TZ=America/Los_Angeles date +%Y%m%d_%H%M%S)" >> $GITHUB_ENV
+    - name: push to ghcr.io
+      run: |
+        echo ${{ secrets.GITHUB_TOKEN }} | apptainer remote login -u ${{ github.actor }} --password-stdin oras://ghcr.io
+        pwd
+        ls -l
+        apptainer remote list
+        apptainer push /tmp/openmm.sif ${{ env.tag }}:${{ env.date }}
+        apptainer push /tmp/openmm.sif ${{ env.tag }}:latest
+    - name: test image with apptainer
+      run: |
+        rm -f /tmp/openmm.sif || true
+        apptainer cache clean -f || true
+        apptainer pull  -F /tmp/openmm.sif ${{ env.tag }}:${{ env.date }}
+        apptainer exec    /tmp/openmm.sif  python  -m openmm.testInstallation
+        apptainer exec ${{ env.tag }}:${{ env.date }} ls -lrt /opt/conda/bin |tail || true
+        apptainer cache list -v
