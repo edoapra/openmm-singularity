@@ -73,12 +73,13 @@ python -m pip install  --no-binary :all: mpi4py
 # might need to compile from source NetCDF & HDF5
 # NetCDF (compiled with netcdf4 support) and HDF5
 apt-get install -y libhdf5-dev libhdf4-dev libnetcdf-dev
+ dpkg-query -Wf '${Installed-Size}\t${Package}\n' | sort -n |tail -120 
 python -m pip install netCDF4
 
 
 #install openmm from source
 apt-get install -y g++
-if [ {{  CUDA_DRIVER_VERSION }} != "0" ]; then apt-get install -y nvidia-cuda-toolkit; fi
+if [ {{  CUDA_DRIVER_VERSION }} != "0" ]; then apt-get install -y nvidia-cuda-toolkit; else apt-get install -y cuda-cudart-dev-11-7; fi
 apt-get install -y cmake-curses-gui cmake make swig doxygen curl bzip2 gzip tar graphviz
 python -m pip install numpy Cython
 
