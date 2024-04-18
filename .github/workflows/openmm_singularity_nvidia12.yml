@@ -25,11 +25,12 @@ jobs:
             - 12.0.1
             - 12.1.1
             - 12.2.0
-            - 12.3.1
             - 12.3.2
+            - 12.4.1
           cuda_driver_version:
             - 530
             - 545
+            - 550
           include:
             - bootstrap: ubuntu:22.04
               cuda_version: 0.0.0
