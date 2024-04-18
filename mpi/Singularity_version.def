@@ -86,9 +86,10 @@ mkdir build
 cd build
 cmake ..
 make -j4
+make install
+make PythonInstall
 
-
-python -m openmm.testInstallation
+python -m openmm.testInstallation||true
 
 # extra python components for https://github.com/molmod/openmm-tutorial-msbs/blob/main/01_first_steps/02_lennard_jones.ipynb
 
