@@ -86,6 +86,7 @@ apt-key adv --fetch-keys https://developer.download.nvidia.com/compute/cuda/repo
 add-apt-repository "deb https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64/ /" && \
 apt-get install -y cuda-cudart-dev-11-7; fi
 apt-get install -y cmake-curses-gui cmake make swig doxygen curl bzip2 gzip tar graphviz
+ dpkg-query -Wf '${Installed-Size}\t${Package}\n' | sort -n |tail -120 
 python -m pip install numpy Cython
 
 curl -LJO https://github.com/openmm/openmm/archive/refs/tags/8.1.1.tar.gz
