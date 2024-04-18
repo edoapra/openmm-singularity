@@ -1,12 +1,14 @@
 Bootstrap: docker
 #From: ubuntu:22.04
 #From: nvidia/cuda:11.7.0-runtime-ubuntu22.04
-From: nvidia/cuda:{{ CUDA_VERSION }}-runtime-ubuntu22.04
+From: {{ MY_BOOTSTRAP }}
+#From: nvidia/cuda:{{ CUDA_VERSION }}-runtime-ubuntu22.04
 Stage: spython-base
 
 %arguments
    CUDA_DRIVER_VERSION=530
    CUDA_VERSION=12.2.0
+   MY_BOOTSTRAP=nvidia/cuda:{{ CUDA_VERSION }}-runtime-ubuntu22.04
 
 
 %files
@@ -20,7 +22,8 @@ apt-get -q update && DEBIAN_FRONTEND=noninteractive apt-get -q install -y wget l
 ln -fs /usr/share/zoneinfo/America/Los_Angeles /etc/localtime && \
 dpkg-reconfigure --frontend noninteractive tzdata && \
 echo CUDA_DRIVER_VERSION is {{ CUDA_DRIVER_VERSION }} && \
-apt-get install -y  nvidia-utils-{{ CUDA_DRIVER_VERSION }} nvidia-compute-utils-{{ CUDA_DRIVER_VERSION }} && \
+if [ {{  CUDA_DRIVER_VERSION }} != "0" ]; then echo CUDA_DRIVER_VERSION is {{ CUDA_DRIVER_VERSION }} ; \
+apt-get install -y  nvidia-utils-{{ CUDA_DRIVER_VERSION }} nvidia-compute-utils-{{ CUDA_DRIVER_VERSION }};fi   &&\
  rm -rf /var/lib/apt/lists/* && \
  apt-get autoremove -y && \
  dpkg-query -Wf '${Installed-Size}\t${Package}\n' | sort -n |tail -120 && \
@@ -75,7 +78,7 @@ python -m pip install netCDF4
 
 #install openmm from source
 apt-get install -y g++
-apt-get install -y nvidia-cuda-toolkit
+if [ {{  CUDA_DRIVER_VERSION }} != "0" ]; then apt-get install -y nvidia-cuda-toolkit; fi
 apt-get install -y cmake-curses-gui cmake make swig doxygen curl bzip2 gzip tar graphviz
 python -m pip install numpy Cython
 
