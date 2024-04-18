@@ -76,7 +76,7 @@ python -m pip install netCDF4
 #install openmm from source
 apt-get install -y g++
 apt-get install -y nvidia-cuda-toolkit
-apt-get install -y cmake make swig doxygen curl bzip2 gzip tar
+apt-get install -y cmake-curses-gui cmake make swig doxygen curl bzip2 gzip tar graphviz
 python -m pip install numpy Cython
 
 curl -LJO https://github.com/openmm/openmm/archive/refs/tags/8.1.1.tar.gz
