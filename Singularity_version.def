@@ -53,7 +53,7 @@ export MAX_JOBS=2 # ninja workers
 
 micromamba install  -y -c conda-forge  openmm=8.1.1
 micromamba install  -y -c conda-forge  openmm-setup
-micromamba install  -y -c conda-forge  openmm-tools
+micromamba install  -y -c conda-forge  openmmtools
 
 
 micromamba install -y -c conda-forge flask=2.1.3
