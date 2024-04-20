@@ -102,6 +102,14 @@ cd ../..
 rm -rf openmm-*
 python -m openmm.testInstallation||true
 
+# mpiplus
+
+curl -LJO https://github.com/choderalab/mpiplus/archive/0.0.2.tar.gz
+tar xzf mpiplus-0.0.2.tar.gz
+cd mpiplus-0.0.2
+python -m pip install . -vv
+cd ..
+
 # openmmtools
 
 curl -LJO https://github.com/choderalab/openmmtools/archive/0.23.1.tar.gz
@@ -112,19 +120,19 @@ cd ..
 
 #yank 
 
-curl -LJO https://github.com/choderalab/yank/archive/0.25.2.tar.gz
-tar xzf yank-0.25.2.tar.gz
-cd yank-0.25.2
-python -m pip install . -vv
-cd ..
+#curl -LJO https://github.com/choderalab/yank/archive/0.25.2.tar.gz
+#tar xzf yank-0.25.2.tar.gz
+#cd yank-0.25.2
+#python -m pip install . -vv
+#cd ..
 
 #cg_openmm
 
-curl -LJO https://github.com/shirtsgroup/cg_openmm/archive/refs/tags/v0.2.0.tar.gz
-tar xzf cg_openmm-0.2.0.tar.gz
-cd cg_openmm-0.2.0
-python setup.py install
-cd ..
+#curl -LJO https://github.com/shirtsgroup/cg_openmm/archive/refs/tags/v0.2.0.tar.gz
+#tar xzf cg_openmm-0.2.0.tar.gz
+#cd cg_openmm-0.2.0
+#python setup.py install
+#cd ..
 # extra python components for https://github.com/molmod/openmm-tutorial-msbs/blob/main/01_first_steps/02_lennard_jones.ipynb
 
 python -m pip install matplotlib mdtraj nglview numpy pandas
