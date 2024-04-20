@@ -60,7 +60,6 @@ apt-get update \
 --disable-mpi-cxx --disable-cxx-exceptions  \
 && make -j 6                                                  \
 &&make install                                                             \
-&& make clean                                                               \
 && cd .. ; rm -rf *tar*gz $ompi-prefix ucx-$ucx  \
 && echo ' mpicc' `/opt/ompi/bin/mpicc -show || true` \
 && echo '********'  \
@@ -104,11 +103,26 @@ python -m openmm.testInstallation||true
 
 # mpiplus
 
-curl -LJO https://github.com/choderalab/mpiplus/archive/0.0.2.tar.gz
+curl -LJO https://github.com/choderalab/mpiplus/archive/refs/tags/v0.0.2.tar.gz
 tar xzf mpiplus-0.0.2.tar.gz
 cd mpiplus-0.0.2
 python -m pip install . -vv
 cd ..
+
+# openmmtools deps
+
+python -m pip install \
+     cython \
+     numpy \
+     scipy \
+     mdtraj \
+     numpydoc \
+     netcdf4 \
+     libnetcdf \
+     pymbar \
+     pyyaml
+
+
 
 # openmmtools
 
