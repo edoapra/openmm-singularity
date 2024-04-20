@@ -119,7 +119,8 @@ python -m pip install \
      numpydoc \
      netcdf4 \
      libnetcdf \
-     pymbar \
+     numba \
+     pymbar[jax] \
      pyyaml
 
 
