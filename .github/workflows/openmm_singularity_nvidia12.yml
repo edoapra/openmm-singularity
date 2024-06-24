@@ -44,6 +44,7 @@ jobs:
     - name: pkg cleanup
       shell: bash
       run: |
+        ubuntu_ver=$(cat /etc/os-release | grep VERSION_ID |cut -d \" -f 2)
         dpkg-query -Wf '${Installed-Size}\t${Package}\n' | sort -n
         sudo apt-get purge -y azure-cli || true
         sudo apt-get purge -y google-cloud-cli microsoft-edge-stable dotnet-sdk-7.0 dotnet-sdk-6.0 google-chrome-stable firefox
