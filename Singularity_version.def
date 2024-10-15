@@ -63,7 +63,7 @@ micromamba install -y -c conda-forge openawsem
 
 #git clone https://github.com/cabb99/awsemtools.git
 export COMMIT=cd5c6a914d85e9b05bbf9eef13947aa2f596d9fc
-curl -L https://github.com/cabb99/awsemtools/archive/$COMMIT.tar.gz -o awsemtools.tar.gz
+wget https://github.com/cabb99/awsemtools/archive/$COMMIT.tar.gz -O awsemtools.tar.gz
 tar xzf awsemtools.tar.gz
 rm awsemtools.tar.gz
 cd awsemtools-*
