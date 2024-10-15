@@ -34,6 +34,7 @@ MYPREFIX="/opt/conda"
     rm -f /tmp/$MINIFORGE3 && \
     export PATH="$MYPREFIX/bin:$PATH" && \
     eval "$($MYPREFIX/bin/conda shell.dash hook)" && \
+    conda install -y -c conda-forge python=3.11.10 && \
       conda update -n base -c conda-forge conda  && \
       conda install -y -c conda-forge micromamba && \
     export MAMBA_ROOT_PREFIX=/opt/micromamba && \
