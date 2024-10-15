@@ -62,7 +62,7 @@ micromamba install -y -c conda-forge werkzeug=2.0.3
 micromamba install -y -c conda-forge openawsem
 
 #git clone https://github.com/cabb99/awsemtools.git
-export COMMIT=cd5c6a914d85e9b05bbf9eef13947aa2f596d9fc
+export COMMIT=cd5c6a914d85e9b05bbf9eef13947aa2f596d9fci
 wget https://github.com/cabb99/awsemtools/archive/$COMMIT.tar.gz -O awsemtools.tar.gz
 tar xzf awsemtools.tar.gz
 rm awsemtools.tar.gz
@@ -70,7 +70,15 @@ cd awsemtools-*
 pip install --user -e .
 cd ..
 
-micromamba install -c conda-forge pyemma
+export COMMIT=3327f28b49e388e1ce4a6a83ab2f0c0ac7ca5050
+wget https://github.com/markovmodel/PyEMMA/archive/$COMMIT.tar.gz -O pyemma.tar.gz
+tar xzf pyemma.tar.gz
+rm pyemma.tar.gz
+cd PyEMMA-*
+pip install --user -e .
+cd ..
+
+#micromamba install -c conda-forge pyemma
 
     conda clean -y --force-pkgs-dirs
     du -sk $MYPREFIX/lib/*|sort -n    
