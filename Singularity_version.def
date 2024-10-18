@@ -7,7 +7,8 @@ Stage: spython-base
 %arguments
    CUDA_DRIVER_VERSION=530
    CUDA_VERSION=12.2.0
-   MY_BOOTSTRAP=nvidia/cuda:{{ CUDA_VERSION }}-runtime-ubuntu22.04
+   UBUNTU_VERSION=22.04
+   MY_BOOTSTRAP=nvidia/cuda:{{ CUDA_VERSION }}-runtime-ubuntu{{ UBUNTU_VERSION }}
 
 %files
 %labels
