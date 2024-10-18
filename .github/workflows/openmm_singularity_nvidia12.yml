@@ -30,7 +30,7 @@ jobs:
           include:
             - cuda_version: 12.5.1
               cuda_driver_version: 560
-            - cuda_version: 11.2.1
+            - cuda_version: 11.2.2
               cuda_driver_version: 560
             - cuda_version: 12.3.2
               cuda_driver_version: 545
