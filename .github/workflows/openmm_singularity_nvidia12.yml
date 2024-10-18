@@ -30,6 +30,9 @@ jobs:
           cuda_driver_version:
             - 545
           include:
+            - cuda_version: 12.6.2
+              cuda_driver_version: 560
+              ubuntu_version: 22.04
             - cuda_version: 12.5.1
               cuda_driver_version: 560
               ubuntu_version: 22.04
