@@ -109,6 +109,7 @@ jobs:
         ls -l
         df -h . /tmp
         myargs=" --build-arg CUDA_DRIVER_VERSION=${{ matrix.cuda_driver_version }} \
+        --build-arg UBUNTU_VERSION=${{ matrix.ubuntu_version }} "
         --build-arg CUDA_VERSION=${{ matrix.cuda_version }} "
         if [ ! -z ${{ matrix.bootstrap }}  ]; then
         myargs+=" --build-arg MY_BOOTSTRAP=${{ matrix.bootstrap }} "; fi
