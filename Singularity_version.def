@@ -37,17 +37,17 @@ MYPREFIX="/opt/conda"
     eval "$($MYPREFIX/bin/conda shell.dash hook)" 
       conda update --quiet -y -n base -c conda-forge conda 
       conda install -y -c conda-forge micromamba
-      ls -lrt
-      ls -lrta /opt
-      echo "find micromamba in /opt" $(find /opt  -name micromamba) ||true
-      echo "find micromamba from pwd" $(find .  -name micromamba) ||true
-    export MAMBA_ROOT_PREFIX=/opt/micromamba 
-      eval "$(micromamba shell hook --shell dash)" 
+#      ls -lrt
+#      ls -lrta /opt
+#      echo "find micromamba in /opt" $(find /opt  -name micromamba) ||true
+#      echo "find micromamba from pwd" $(find .  -name micromamba) ||true
+#    export MAMBA_ROOT_PREFIX=/opt/micromamba 
+#      eval "$(micromamba shell hook --shell dash)" 
     conda create -y --name py38 python==3.8
     conda activate py38 
 export CONDA_FETCH_THREADS=2 # parallel download for recent conda versions
 export MAX_JOBS=2 # ninja workers
- eval "$(${MYPREFIX}/bin/conda shell.bash hook)"
+# eval "$(${MYPREFIX}/bin/conda shell.bash hook)"
 #hack to fix miniconda GLIBCXX error
 #conda install -q -y libstdcxx-ng
 #ls -l /opt/miniconda3/lib/libstdc++.so.6 /usr/lib/x86_64-linux-gnu/libstdc++.so.6 || true
@@ -78,7 +78,7 @@ echo OPENAWSEM_LOCATION is $OPENAWSEM_LOCATION
     wget https://webclu.bio.wzw.tum.de/stride/stride.tar.gz
 tar -xvzf stride.tar.gz
 make
-echo 'export PATH=$PATH:'`pwd` >> ~/.bashrc
+echo 'export PATH=$PATH:'$(pwd) >> ~/.bashrc
 wget https://raw.githubusercontent.com/realbigws/Predict_Property/refs/heads/master/Predict_Property.sh 
 chmod +x stride/Predict_Property.sh
 cd ../..
