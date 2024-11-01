@@ -80,7 +80,7 @@ tar -xvzf stride.tar.gz
 make
 echo 'export PATH=$PATH:'$(pwd) >> ~/.bashrc
 wget https://raw.githubusercontent.com/realbigws/Predict_Property/refs/heads/master/Predict_Property.sh 
-chmod +x stride/Predict_Property.sh
+chmod +x Predict_Property.sh
 cd ../..
 ls -lrt
 
