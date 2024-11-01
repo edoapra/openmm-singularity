@@ -35,7 +35,8 @@ MYPREFIX="/opt/conda"
     rm -f /tmp/$MINIFORGE3 && \
     export PATH="$MYPREFIX/bin:$PATH" && \
     eval "$($MYPREFIX/bin/conda shell.dash hook)" && \
-    conda install -y -c conda-forge python=3.11.10 && \
+    conda create -y --name py38 python==3.8 && \
+    conda activate py38 && \
       conda update -n base -c conda-forge conda  && \
       conda install -y -c conda-forge micromamba && \
     export MAMBA_ROOT_PREFIX=/opt/micromamba && \
@@ -61,7 +62,35 @@ micromamba install  -y -c conda-forge  yank
 
 micromamba install -y -c conda-forge flask=2.1.3
 micromamba install -y -c conda-forge werkzeug=2.0.3
+#openawsem & req.
 micromamba install -y -c conda-forge openawsem
+# use python 3.9 and pin     biopython=1.79 to avoid the error "cannot import name 'three_to_one' 
+    micromamba install -c conda-forge -y biopython=1.79 
+OPENAWSEM_LOCATION=$(python -c "import openawsem; print(openawsem.__location__)")
+echo OPENAWSEM_LOCATION is $OPENAWSEM_LOCATION
+    
+    mkdir openawsem.reqs
+    cd openawsem.reqs
+    mkdir stride && cd stride
+    wget https://webclu.bio.wzw.tum.de/stride/stride.tar.gz
+tar -xvzf stride.tar.gz
+make
+echo 'export PATH=$PATH:'`pwd` >> ~/.bashrc
+wget https://raw.githubusercontent.com/realbigws/Predict_Property/refs/heads/master/Predict_Property.sh -O stride/Predict_Property.sh
+chmod +x stride/Predict_Property.sh
+cd ../..
+ls -lrt
+
+micromamba install -c conda-forge -c bioconda -y blast
+
+
+wget ftp://ftp.wwpdb.org/pub/pdb/derived_data/pdb_seqres.txt
+OPENAWSEM_LOCATION=$(python -c "import openawsem; print(openawsem.__location__)")
+echo OPENAWSEM_LOCATION is $OPENAWSEM_LOCATION
+mkdir -p $OPENAWSEM_LOCATION/data
+cp pdb_seqres.txt $OPENAWSEM_LOCATION/data
+rm pdb_seqres.txt
+
 
 
 export COMMIT=3327f28b49e388e1ce4a6a83ab2f0c0ac7ca5050
@@ -99,7 +128,14 @@ python -m pip install matplotlib mdtraj nglview numpy pandas ParmEd
 %environment
 export CUDA=$(echo $CUDA_VERSION |cut -c 1-4)
 MYPREFIX="/opt/conda"
-export PATH=$MYPREFIX/bin:$MYPREFIX/condabin:$PATH
+CONDA_PREFIX=$MYPREFIX/envs/py38
+CONDA_PROMPT_MODIFIER=(py38) 
+CONDA_DEFAULT_ENV=py38
+CONDA_EXE=$MYPREFIX/bin/conda
+CONDA_PREFIX=$MYPREFIX/envs/py38
+MAMBA_ROOT_PREFIX=$MYPREFIX/micromamba
+CONDA_PYTHON_EXE=$MYPREFIX/bin/python
+export PATH=$MYPREFIX/bin:$MYPREFIX/condabin:$MYPREFIX/openawsem.reqs/stride:$CONDA_PREFIX/bin:$PATH
 export LD_LIBRARY_PATH=/usr/local/cuda-${CUDA}/compat:/usr/local/cuda-${CUDA}/lib64:$LD_LIBRARY_PATH
 #%runscript
 #exec /bin/bash "$@"
