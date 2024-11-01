@@ -37,11 +37,10 @@ MYPREFIX="/opt/conda"
     eval "$($MYPREFIX/bin/conda shell.dash hook)" && \
     conda create -y --name py38 python==3.8 && \
     conda activate py38 && \
-      conda update -n base -c conda-forge conda  && \
-      conda install -y -c conda-forge micromamba && \
-    export MAMBA_ROOT_PREFIX=/opt/micromamba && \
-      eval "$(micromamba shell hook --shell dash)" && \
+      conda update --quite -y -n base -c conda-forge conda 
+      conda install -y -c conda-forge micromamba
     export MAMBA_ROOT_PREFIX=/opt/micromamba 
+      eval "$(micromamba shell hook --shell dash)" 
 export CONDA_FETCH_THREADS=2 # parallel download for recent conda versions
 export MAX_JOBS=2 # ninja workers
  eval "$(${MYPREFIX}/bin/conda shell.bash hook)"
