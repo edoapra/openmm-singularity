@@ -34,9 +34,7 @@ MYPREFIX="/opt/conda"
     bash /tmp/$MINIFORGE3 -b -u -p $MYPREFIX && \
     rm -f /tmp/$MINIFORGE3 && \
     export PATH="$MYPREFIX/bin:$PATH" && \
-    eval "$($MYPREFIX/bin/conda shell.dash hook)" && \
-    conda create -y --name py38 python==3.8 && \
-    conda activate py38 && \
+    eval "$($MYPREFIX/bin/conda shell.dash hook)" 
       conda update --quiet -y -n base -c conda-forge conda 
       conda install -y -c conda-forge micromamba
       ls -lrt
@@ -45,6 +43,8 @@ MYPREFIX="/opt/conda"
       echo "find micromamba from pwd" $(find .  -name micromamba) ||true
     export MAMBA_ROOT_PREFIX=/opt/micromamba 
       eval "$(micromamba shell hook --shell dash)" 
+    conda create -y --name py38 python==3.8
+    conda activate py38 
 export CONDA_FETCH_THREADS=2 # parallel download for recent conda versions
 export MAX_JOBS=2 # ninja workers
  eval "$(${MYPREFIX}/bin/conda shell.bash hook)"
@@ -79,7 +79,7 @@ echo OPENAWSEM_LOCATION is $OPENAWSEM_LOCATION
 tar -xvzf stride.tar.gz
 make
 echo 'export PATH=$PATH:'`pwd` >> ~/.bashrc
-wget https://raw.githubusercontent.com/realbigws/Predict_Property/refs/heads/master/Predict_Property.sh -O stride/Predict_Property.sh
+wget https://raw.githubusercontent.com/realbigws/Predict_Property/refs/heads/master/Predict_Property.sh 
 chmod +x stride/Predict_Property.sh
 cd ../..
 ls -lrt
