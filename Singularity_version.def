@@ -37,7 +37,7 @@ MYPREFIX="/opt/conda"
     eval "$($MYPREFIX/bin/conda shell.dash hook)" && \
     conda create -y --name py38 python==3.8 && \
     conda activate py38 && \
-      conda update --quite -y -n base -c conda-forge conda 
+      conda update --quiet -y -n base -c conda-forge conda 
       conda install -y -c conda-forge micromamba
       ls -lrt
       ls -lrta /opt
