@@ -17,7 +17,7 @@ org.opencontainers.image.version  "1.0.0"
 org.opencontainers.image.authors  "Edoardo Apra"
 %post
 
-apt-get -q update && DEBIAN_FRONTEND=noninteractive apt-get -q install -y wget libstdc++6 gcc g++ gfortran tzdata lsof zlib1g-dev && \
+apt-get -q update && DEBIAN_FRONTEND=noninteractive apt-get -q install -y wget libstdc++6 gcc g++ gfortran tzdata lsof zlib1g-dev make && \
 ln -fs /usr/share/zoneinfo/America/Los_Angeles /etc/localtime && \
 dpkg-reconfigure --frontend noninteractive tzdata && \
 if [ {{  CUDA_DRIVER_VERSION }} != "0" ]; then echo CUDA_DRIVER_VERSION is {{ CUDA_DRIVER_VERSION }} ; \
