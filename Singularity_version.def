@@ -11,7 +11,7 @@ Stage: spython-base
    MY_BOOTSTRAP=nvidia/cuda:{{ CUDA_VERSION }}-runtime-ubuntu{{ UBUNTU_VERSION }}
 
 %files
-data/notExistPDBsList /notExistPDBsList
+#data/notExistPDBsList /notExistPDBsList
 %labels
 maintainer  Edoardo Apra <edoardo.apra@pnnl.gov>
 org.opencontainers.image.version  "1.0.0"
@@ -90,7 +90,7 @@ ls -lrt
 
 micromamba install -c conda-forge -c bioconda -y blast
 # replace ftp://ftp.wwpdb.org with https://files.rcsb.org since it has DNS failures
-BIOPYTHON_LOCATION=$(python -c "import biopython; print(biopython.__location__)") || true
+BIOPYTHON_LOCATION=$(python -c "import Bio; print(Bio.__location__)") || true
 echo BIOPTYHON_LOCATION is $BIOPTYHON_LOCATION || true
 sed -i 's/ftp:\/\/ftp.wwpdb.org/https:\/\/files.rcsb.org/' /opt/conda/envs/py38/lib/python3.8/site-packages/Bio/PDB/PDBList.py
 cd $OPENAWSEM_LOCATION/helperFunctions
@@ -105,11 +105,12 @@ OPENAWSEM_LOCATION=$(python -c "import openawsem; print(openawsem.__location__)"
 echo OPENAWSEM_LOCATION is $OPENAWSEM_LOCATION
 mkdir -p $OPENAWSEM_LOCATION/data
 cp pdb_seqres.txt $OPENAWSEM_LOCATION/data
-cp /notExistPDBsList  $OPENAWSEM_LOCATION/data
-rm pdb_seqres.txt /notExistPDBsList
+touch $OPENAWSEM_LOCATION/data/notExistPDBsList
+#cp /notExistPDBsList  $OPENAWSEM_LOCATION/data
+rm pdb_seqres.txt #/notExistPDBsList
 
-
-
+#needed for pdb_reres
+micromamba install -c conda-forge pdb-tools
 
 export COMMIT=3327f28b49e388e1ce4a6a83ab2f0c0ac7ca5050
 wget https://github.com/markovmodel/PyEMMA/archive/$COMMIT.tar.gz -O pyemma.tar.gz
