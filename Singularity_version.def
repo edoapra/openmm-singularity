@@ -90,8 +90,15 @@ ls -lrt
 
 micromamba install -c conda-forge -c bioconda -y blast
 # replace ftp://ftp.wwpdb.org with https://files.rcsb.org since it has DNS failures
+BIOPYTHON_LOCATION=$(python -c "import biopython; print(biopython.__location__)") || true
+echo BIOPTYHON_LOCATION is $BIOPTYHON_LOCATION || true
 sed -i 's/ftp:\/\/ftp.wwpdb.org/https:\/\/files.rcsb.org/' /opt/conda/envs/py38/lib/python3.8/site-packages/Bio/PDB/PDBList.py
+cd $OPENAWSEM_LOCATION/helperFunctions
+sed -i 's/ftp:\/\/ftp.wwpdb.org/https:\/\/files.rcsb.org/'  create_fragment_memory.py
+sed -i 's/ftp:\/\/ftp.wwpdb.org/https:\/\/files.rcsb.org/' MultCha_prepFrags_index.py
 
+
+cd /
 
 wget https://files.rcsb.org/pub/pdb/derived_data/pdb_seqres.txt
 OPENAWSEM_LOCATION=$(python -c "import openawsem; print(openawsem.__location__)")
