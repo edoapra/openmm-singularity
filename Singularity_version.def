@@ -39,6 +39,10 @@ MYPREFIX="/opt/conda"
     conda activate py38 && \
       conda update --quite -y -n base -c conda-forge conda 
       conda install -y -c conda-forge micromamba
+      ls -lrt
+      ls -lrta /opt
+      echo "find micromamba in /opt" $(find /opt  -name micromamba) ||true
+      echo "find micromamba from pwd" $(find .  -name micromamba) ||true
     export MAMBA_ROOT_PREFIX=/opt/micromamba 
       eval "$(micromamba shell hook --shell dash)" 
 export CONDA_FETCH_THREADS=2 # parallel download for recent conda versions
