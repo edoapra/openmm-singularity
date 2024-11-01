@@ -71,17 +71,20 @@ micromamba install -y -c conda-forge openawsem
     micromamba install -c conda-forge -y biopython=1.79 
 OPENAWSEM_LOCATION=$(python -c "import openawsem; print(openawsem.__location__)")
 echo OPENAWSEM_LOCATION is $OPENAWSEM_LOCATION
-    
+cd /opt/conda    
     mkdir openawsem.reqs
     cd openawsem.reqs
-    mkdir stride && cd stride
+    mkdir stride-src && cd stride-src
     wget https://webclu.bio.wzw.tum.de/stride/stride.tar.gz
 tar -xvzf stride.tar.gz
+rm stride.tar.gz
 make
-echo 'export PATH=$PATH:'$(pwd) >> ~/.bashrc
+mv stride ../
+cd ..
+rm -rf stride-src
 wget https://raw.githubusercontent.com/realbigws/Predict_Property/refs/heads/master/Predict_Property.sh 
 chmod +x Predict_Property.sh
-cd ../..
+cd ..
 ls -lrt
 
 micromamba install -c conda-forge -c bioconda -y blast
@@ -103,6 +106,7 @@ rm pyemma.tar.gz
 cd PyEMMA-*
 pip install --user -e .
 cd ..
+rm -rf PyEMMA-*
 #git clone https://github.com/cabb99/awsemtools.git
 export COMMIT=cd5c6a914d85e9b05bbf9eef13947aa2f596d9fc
 wget https://github.com/cabb99/awsemtools/archive/$COMMIT.tar.gz -O awsemtools.tar.gz
@@ -111,7 +115,7 @@ rm awsemtools.tar.gz
 cd awsemtools-*
 pip install --user -e .
 cd ..
-
+rm -rf awsemtools-*
 
 #micromamba install -c conda-forge pyemma
 
@@ -138,7 +142,7 @@ CONDA_EXE=$MYPREFIX/bin/conda
 CONDA_PREFIX=$MYPREFIX/envs/py38
 MAMBA_ROOT_PREFIX=$MYPREFIX/micromamba
 CONDA_PYTHON_EXE=$MYPREFIX/bin/python
-export PATH=$MYPREFIX/bin:$MYPREFIX/condabin:$MYPREFIX/openawsem.reqs/stride:$CONDA_PREFIX/bin:$PATH
+export PATH=$CONDA_PREFIX/bin:$MYPREFIX/bin:$MYPREFIX/condabin:$MYPREFIX/openawsem.reqs:$PATH
 export LD_LIBRARY_PATH=/usr/local/cuda-${CUDA}/compat:/usr/local/cuda-${CUDA}/lib64:$LD_LIBRARY_PATH
 #%runscript
 #exec /bin/bash "$@"
