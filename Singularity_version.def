@@ -44,8 +44,8 @@ MYPREFIX="/opt/conda"
 #      echo "find micromamba from pwd" $(find .  -name micromamba) ||true
 #    export MAMBA_ROOT_PREFIX=/opt/micromamba 
 #      eval "$(micromamba shell hook --shell dash)" 
-    conda create -y --name py38 python==3.8
-    conda activate py38 
+    conda create -y --name py39 python==3.9
+    conda activate py39 
 export CONDA_FETCH_THREADS=2 # parallel download for recent conda versions
 export MAX_JOBS=2 # ninja workers
 # eval "$(${MYPREFIX}/bin/conda shell.bash hook)"
@@ -94,7 +94,7 @@ micromamba install -c conda-forge -c bioconda -y blast
 # replace ftp://ftp.wwpdb.org with https://files.rcsb.org since it has DNS failures
 BIOPYTHON_LOCATION=$(python -c "import Bio; print(Bio.__location__)") || true
 echo BIOPTYHON_LOCATION is $BIOPTYHON_LOCATION || true
-sed -i 's/ftp:\/\/ftp.wwpdb.org/https:\/\/files.rcsb.org/' /opt/conda/envs/py38/lib/python3.8/site-packages/Bio/PDB/PDBList.py
+sed -i 's/ftp:\/\/ftp.wwpdb.org/https:\/\/files.rcsb.org/' /opt/conda/envs/py39/lib/python3.9/site-packages/Bio/PDB/PDBList.py
 cd $OPENAWSEM_LOCATION/helperFunctions
 sed -i 's/ftp:\/\/ftp.wwpdb.org/https:\/\/files.rcsb.org/'  create_fragment_memory.py
 sed -i 's/ftp:\/\/ftp.wwpdb.org/https:\/\/files.rcsb.org/' MultCha_prepFrags_index.py
@@ -156,11 +156,11 @@ python -m pip install matplotlib mdtraj nglview numpy pandas ParmEd
 %environment
 export CUDA=$(echo $CUDA_VERSION |cut -c 1-4)
 MYPREFIX="/opt/conda"
-CONDA_PREFIX=$MYPREFIX/envs/py38
-CONDA_PROMPT_MODIFIER=(py38) 
-CONDA_DEFAULT_ENV=py38
+CONDA_PREFIX=$MYPREFIX/envs/py39
+CONDA_PROMPT_MODIFIER=(py39) 
+CONDA_DEFAULT_ENV=py39
 CONDA_EXE=$MYPREFIX/bin/conda
-CONDA_PREFIX=$MYPREFIX/envs/py38
+CONDA_PREFIX=$MYPREFIX/envs/py39
 MAMBA_ROOT_PREFIX=$MYPREFIX/micromamba
 CONDA_PYTHON_EXE=$MYPREFIX/bin/python
 export PATH=$CONDA_PREFIX/bin:$MYPREFIX/bin:$MYPREFIX/condabin:$MYPREFIX/openawsem.reqs:$PATH
