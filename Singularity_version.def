@@ -144,6 +144,8 @@ rm -rf awsemtools-*
     du -sk $MYPREFIX/lib/*|sort -n    
     rm -f /usr/local/cuda-*/targets/x86_64-linux/lib/lib*.a || true
     rm -f $MYPREFIX/lib/*amdg* || true
+    rm -rf /opt/conda/envs/py39/include/* || true
+    rm -f /opt/conda/envs/py39/lib/python3.9/site-packages/openawsem/data/pdb_seqres.txt ||true
 #    rm -f $MYPREFIX/lib/*cublas*
 
 
