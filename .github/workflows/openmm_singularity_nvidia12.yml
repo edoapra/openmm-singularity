@@ -31,6 +31,9 @@ jobs:
             - 545
           include:
             - cuda_version: 12.6.2
+              cuda_driver_version: 565
+              ubuntu_version: 22.04
+            - cuda_version: 12.6.2
               cuda_driver_version: 560
               ubuntu_version: 22.04
             - cuda_version: 12.5.1
@@ -61,7 +64,7 @@ jobs:
       run: |
         ubuntu_ver=$(cat /etc/os-release | grep VERSION_ID |cut -d \" -f 2)
         dpkg-query -Wf '${Installed-Size}\t${Package}\n' | sort -n
-        sudo apt-get purge -y azure-cli google-cloud-cli || true
+        sudo apt-get purge -y azure-cli google-cloud-cli powershell || true
         sudo apt-get purge -y mysql-server-core-8.0 mysql-client-core-8.0 ||true
         sudo apt-get purge -y microsoft-edge-stable google-chrome-stable firefox 
         sudo apt-get purge -y dotnet-sdk-7.0 dotnet-sdk-6.0 dotnet-sdk-8.0 dotnet-targeting-pack-8.0
@@ -71,6 +74,7 @@ jobs:
         sudo apt-get purge -y llvm-12-dev llvm-11-dev llvm-10-dev
         sudo apt-get purge -y hhvm
         sudo apt-get purge -y libgl1-mesa-dri
+        sudo apt-get purge -y openjdk-* || true
         fi
         if [[ $ubuntu_ver == "22.04" ]]; then
         sudo apt-get purge -y llvm-13-dev llvm-14-dev llvm-15-dev
