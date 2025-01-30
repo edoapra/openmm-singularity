@@ -70,18 +70,18 @@ jobs:
         sudo apt-get purge -y azure-cli google-cloud-cli powershell || true
         sudo apt-get purge -y mysql-server-core-8.0 mysql-client-core-8.0 ||true
         sudo apt-get purge -y microsoft-edge-stable google-chrome-stable firefox 
-        sudo apt-get purge -y dotnet-sdk-7.0 dotnet-sdk-6.0 dotnet-sdk-8.0 dotnet-targeting-pack-8.0
+        sudo apt-get purge -y dotnet-sdk-*
+        sudo apt-get purge dotnet-targeting-pack-*
         sudo apt-get purge -y mongodb-mongosh mongodb-org-server mongodb-org-mongos mono-devel
-        sudo apt-get purge -y temurin-17-jdk temurin-11-jdk temurin-8-jdk temurin-21-jdk
+        sudo apt-get purge -y temurin-*-jdk 
+        sudo apt-get purge -y llvm-*-dev
         if [[ $ubuntu_ver == "20.04" ]]; then
-        sudo apt-get purge -y llvm-12-dev llvm-11-dev llvm-10-dev
         sudo apt-get purge -y hhvm
         sudo apt-get purge -y libgl1-mesa-dri
         sudo apt-get purge -y openjdk-* || true
         fi
-        if [[ $ubuntu_ver == "22.04" ]]; then
-        sudo apt-get purge -y llvm-13-dev llvm-14-dev llvm-15-dev
-        fi
+        sudo apt-get purge -y esl-erlang ||true
+        sudo apt-get purge -y docker-ce containerd.io podman ||true
         sudo apt-get -y clean
         sudo apt-get autoremove -y 
         dpkg-query -Wf '${Installed-Size}\t${Package}\n' | sort -n
