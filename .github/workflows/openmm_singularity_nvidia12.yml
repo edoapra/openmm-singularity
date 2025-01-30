@@ -88,6 +88,7 @@ jobs:
         sudo apt-get autoremove -y 
         dpkg-query -Wf '${Installed-Size}\t${Package}\n' | sort -n
         df -h
+        ls -lrta /mnt
     - name: tag
       shell: bash
       run: |
