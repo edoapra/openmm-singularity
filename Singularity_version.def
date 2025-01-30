@@ -78,7 +78,7 @@ cd /opt/conda
     mkdir openawsem.reqs
     cd openawsem.reqs
     mkdir stride-src && cd stride-src
-    wget https://webclu.bio.wzw.tum.de/stride/stride.tar.gz
+    wget --no-check-certificate https://webclu.bio.wzw.tum.de/stride/stride.tar.gz
 tar -xvzf stride.tar.gz
 rm stride.tar.gz
 make
