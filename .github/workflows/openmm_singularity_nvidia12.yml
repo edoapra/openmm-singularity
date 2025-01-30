@@ -89,6 +89,9 @@ jobs:
         dpkg-query -Wf '${Installed-Size}\t${Package}\n' | sort -n
         df -h
         ls -lrta /mnt
+        sudo mkdir /mnt/tmpdir
+        sudo chmod -R uog+rwx /mnt/tmpdir
+        echo 'this is a test' > /mnt/tmpdir/test.txt
     - name: tag
       shell: bash
       run: |
@@ -132,8 +135,8 @@ jobs:
         echo myargs is $myargs
         apptainer build  \
         $myargs \
-        --nv --force --fakeroot /mnt/openmm.sif Singularity_version.def
-        ls -lrth /mnt/openmm.sif
+        --nv --force --fakeroot /mnt/tmpdir/openmm.sif Singularity_version.def
+        ls -lrth /mnt/tmpdir/openmm.sif
       shell: bash
     - name: builddate
       id: build-date
@@ -145,13 +148,13 @@ jobs:
         pwd
         ls -l
         apptainer remote list
-        apptainer push /mnt/openmm.sif ${{ env.tag }}:${{ env.date }}
-        apptainer push /mnt/openmm.sif ${{ env.tag }}:latest
+        apptainer push /mnt/tmpdir/openmm.sif ${{ env.tag }}:${{ env.date }}
+        apptainer push /mnt/tmpdir/openmm.sif ${{ env.tag }}:latest
     - name: test image with apptainer
       run: |
-        rm -f /mnt/openmm.sif || true
+        rm -f /mnt/tmpdir/openmm.sif || true
         apptainer cache clean -f || true
-        apptainer pull  -F /mnt/openmm.sif ${{ env.tag }}:${{ env.date }}
-        apptainer exec    /mnt/openmm.sif  python  -m openmm.testInstallation
+        apptainer pull  -F /mnt/tmpdir/openmm.sif ${{ env.tag }}:${{ env.date }}
+        apptainer exec    /mnt/tmpdir/openmm.sif  python  -m openmm.testInstallation
         apptainer exec ${{ env.tag }}:${{ env.date }} ls -lrt /opt/conda/bin |tail || true
         apptainer cache list -v
