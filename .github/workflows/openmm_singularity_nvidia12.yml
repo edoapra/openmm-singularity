@@ -82,6 +82,8 @@ jobs:
         fi
         sudo apt-get purge -y esl-erlang ||true
         sudo apt-get purge -y docker-ce containerd.io podman ||true
+        sudo apt-get purge -y libclang-common-*dev || true
+        sudo apt-get purge -y snapd || true
         sudo apt-get -y clean
         sudo apt-get autoremove -y 
         dpkg-query -Wf '${Installed-Size}\t${Package}\n' | sort -n
@@ -129,8 +131,8 @@ jobs:
         echo myargs is $myargs
         apptainer build  \
         $myargs \
-        --nv --force --fakeroot /tmp/openmm.sif Singularity_version.def
-        ls -lrth /tmp/openmm.sif
+        --nv --force --fakeroot /mnt/openmm.sif Singularity_version.def
+        ls -lrth /mnt/openmm.sif
       shell: bash
     - name: builddate
       id: build-date
@@ -142,13 +144,13 @@ jobs:
         pwd
         ls -l
         apptainer remote list
-        apptainer push /tmp/openmm.sif ${{ env.tag }}:${{ env.date }}
-        apptainer push /tmp/openmm.sif ${{ env.tag }}:latest
+        apptainer push /mnt/openmm.sif ${{ env.tag }}:${{ env.date }}
+        apptainer push /mnt/openmm.sif ${{ env.tag }}:latest
     - name: test image with apptainer
       run: |
-        rm -f /tmp/openmm.sif || true
+        rm -f /mnt/openmm.sif || true
         apptainer cache clean -f || true
-        apptainer pull  -F /tmp/openmm.sif ${{ env.tag }}:${{ env.date }}
-        apptainer exec    /tmp/openmm.sif  python  -m openmm.testInstallation
+        apptainer pull  -F /mnt/openmm.sif ${{ env.tag }}:${{ env.date }}
+        apptainer exec    /mnt/openmm.sif  python  -m openmm.testInstallation
         apptainer exec ${{ env.tag }}:${{ env.date }} ls -lrt /opt/conda/bin |tail || true
         apptainer cache list -v
