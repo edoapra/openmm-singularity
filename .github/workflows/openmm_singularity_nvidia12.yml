@@ -63,31 +63,9 @@ jobs:
               ubuntu_version: 22.04
     steps:
     - name: pkg cleanup
+      uses: edoapra/ubuntu-pkg-cleanup@main                                                                                                                - name: check mnt
       shell: bash
       run: |
-        ubuntu_ver=$(cat /etc/os-release | grep VERSION_ID |cut -d \" -f 2)
-        dpkg-query -Wf '${Installed-Size}\t${Package}\n' | sort -n
-        sudo apt-get purge -y azure-cli google-cloud-cli powershell || true
-        sudo apt-get purge -y mysql-server-core-8.0 mysql-client-core-8.0 ||true
-        sudo apt-get purge -y microsoft-edge-stable google-chrome-stable firefox 
-        sudo apt-get purge -y dotnet-sdk-*
-        sudo apt-get purge dotnet-targeting-pack-*
-        sudo apt-get purge -y mongodb-mongosh mongodb-org-server mongodb-org-mongos mono-devel
-        sudo apt-get purge -y temurin-*-jdk 
-        sudo apt-get purge -y llvm-*-dev
-        if [[ $ubuntu_ver == "20.04" ]]; then
-        sudo apt-get purge -y hhvm
-        sudo apt-get purge -y libgl1-mesa-dri
-        sudo apt-get purge -y openjdk-* || true
-        fi
-        sudo apt-get purge -y esl-erlang ||true
-        sudo apt-get purge -y docker-ce containerd.io podman ||true
-        sudo apt-get purge -y libclang-common-*dev || true
-        sudo apt-get purge -y snapd || true
-        sudo apt-get -y clean
-        sudo apt-get autoremove -y 
-        dpkg-query -Wf '${Installed-Size}\t${Package}\n' | sort -n
-        df -h
         ls -lrta /mnt
         sudo mkdir /mnt/tmpdir
         sudo chmod -R uog+rwx /mnt/tmpdir
