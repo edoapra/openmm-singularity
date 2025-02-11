@@ -63,7 +63,8 @@ jobs:
               ubuntu_version: 22.04
     steps:
     - name: pkg cleanup
-      uses: edoapra/ubuntu-pkg-cleanup@main                                                                                                                - name: check mnt
+      uses: edoapra/ubuntu-pkg-cleanup@main
+    - name: check mnt
       shell: bash
       run: |
         ls -lrta /mnt
